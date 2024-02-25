@@ -22,9 +22,30 @@ export default function AppBody() {
         }
         updateTaskList([...taskList, obj]);
         setVisibility(false);
-        setCurrent("");
+
+        
+        console.log('Task list updated locally');
+
+        // setCurrent("");
     }
     useEffect(() => {
+        try {
+            const storedTasks = localStorage.getItem("taskList");
+            console.log("for first render only");
+            if (storedTasks) {
+                updateTaskList(JSON.parse(storedTasks));
+            } else {
+                console.log("No tasks found in local storage");
+            }
+        } catch (error) {
+            console.error("Error retrieving data from local storage:", error);
+        }
+    }, []);
+
+
+    useEffect(() => {
+        localStorage.setItem('taskList', JSON.stringify(taskList));
+        console.log('again');
         console.log(taskList);
     }, [taskList]);
 
@@ -35,7 +56,7 @@ export default function AppBody() {
             }
             return task;
         });
-        updateTaskList(updatedTasks);
+        updateTaskList(updatedTasks);//here actuall object returns and updated in actual array
     }
     return (
         <>
