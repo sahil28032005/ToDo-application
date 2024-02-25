@@ -58,6 +58,25 @@ export default function AppBody() {
         });
         updateTaskList(updatedTasks);//here actuall object returns and updated in actual array
     }
+    const handleOnDelete=(id)=>{
+      console.log(id);
+      const arr=taskList.filter((item) => item.id != id);
+      console.log(arr);
+      updateTaskList(arr);
+      localStorage.setItem('taskList', JSON.stringify(arr));
+
+    }
+    const handleOnUpdate=(id)=>{
+        const newArr = taskList.map((item) => {
+            if (item.id !== id) {
+              return item; 
+            } else {
+             
+              return { ...item, title:current };
+            }
+          });
+        updateTaskList(newArr);
+    };
     return (
         <>
             <div className="add" onClick={openModal}><img src="./src/assets/icons8-plus.svg" alt="" /></div>
@@ -65,7 +84,7 @@ export default function AppBody() {
             <div className='cardsContainer'>
                 {
                     taskList.map((item) => {
-                        return <Task handleStatusChange={handleStatusChange} key={item.id} taskNo={item.id} current={item.title} status={item.isComplete} />
+                        return <Task visibility={setVisibility} handleOnDelete={handleOnDelete} handleStatusChange={handleStatusChange} key={item.id} taskNo={item.id} current={item.title} status={item.isComplete} />
                     })
                 }
             </div>

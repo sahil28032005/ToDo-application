@@ -11,7 +11,9 @@ export default function Task(props) {
             <div className="card-header">{"Task No"+props.taskNo}</div>
             <div className="card-body">
                 <h5 className="card-title">{props.current}</h5>
-                <input onChange={handleToggling} checked={props.status} type='checkbox'/>{props.status?"completed":" not completed"}
+                <input onChange={handleToggling} checked={props.status} type='checkbox'/>{props.status?"completed":" not completed"}<br/>
+                <button onClick={() => props.handleOnDelete(props.taskNo)} type="button" className="btn btn-danger my-3">Delete</button>&nbsp;&nbsp;&nbsp;
+                <button type="button" onClick={()=>{props.visibility(true)}} class="btn btn-success">Update</button>
             </div>
         </div>
     )
