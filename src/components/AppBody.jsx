@@ -8,6 +8,7 @@ export default function AppBody() {
     const [showModel, setVisibility] = useState(false);
     const [taskList, updateTaskList] = useState([]);
     const [current, setCurrent] = useState("");
+    console.log(current);
     const openModal = () => {
         setVisibility(true);
     }
@@ -18,17 +19,19 @@ export default function AppBody() {
         const obj = {
             id: taskList.length + 1,
             title: current,
-            isComplete: false
+            isComplete: false,
+            isEditable: false
         }
         updateTaskList([...taskList, obj]);
         setVisibility(false);
 
-        
+
         console.log('Task list updated locally');
 
-        // setCurrent("");
+        setCurrent("");
     }
     useEffect(() => {
+        console.log('first render only');
         try {
             const storedTasks = localStorage.getItem("taskList");
             console.log("for first render only");
@@ -44,6 +47,7 @@ export default function AppBody() {
 
 
     useEffect(() => {
+        console.log("first as well as ");
         localStorage.setItem('taskList', JSON.stringify(taskList));
         console.log('again');
         console.log(taskList);
@@ -58,33 +62,41 @@ export default function AppBody() {
         });
         updateTaskList(updatedTasks);//here actuall object returns and updated in actual array
     }
-    const handleOnDelete=(id)=>{
-      console.log(id);
-      const arr=taskList.filter((item) => item.id != id);
-      console.log(arr);
-      updateTaskList(arr);
-      localStorage.setItem('taskList', JSON.stringify(arr));
+    const handleOnDelete = (id) => {
+        console.log(id);
+        const arr = taskList.filter((item) => item.id != id);
+        console.log(arr);
+        updateTaskList(arr);
+        localStorage.setItem('taskList', JSON.stringify(arr));
 
     }
-    const handleOnUpdate=(id)=>{
-        const newArr = taskList.map((item) => {
-            if (item.id !== id) {
-              return item; 
-            } else {
-             
-              return { ...item, title:current };
+    const handleOnUpdate = (id) => {
+        const updated=taskList.map((item) => {
+            if(item.id === id) {
+                item.isEditable=true;
+                if(current!=""){
+                    item.title=current;
+                    item.isEditable=false;
+                }
+                return item;
             }
-          });
-        updateTaskList(newArr);
+            else{
+                return item;
+            }
+        })
+        console.log(updated);
+        updateTaskList(updated);
+        
     };
+   
     return (
         <>
             <div className="add" onClick={openModal}><img src="./src/assets/icons8-plus.svg" alt="" /></div>
-            <Modal adder={handleOnAdd} setCurrent={setCurrent} visibility={showModel} close={closeModal} />
+            <Modal handleOnUpdate={handleOnUpdate} adder={handleOnAdd} setCurrent={setCurrent} visibility={showModel} close={closeModal} />
             <div className='cardsContainer'>
                 {
                     taskList.map((item) => {
-                        return <Task visibility={setVisibility} handleOnDelete={handleOnDelete} handleStatusChange={handleStatusChange} key={item.id} taskNo={item.id} current={item.title} status={item.isComplete} />
+                        return <Task currentState={current} setCurrent={setCurrent} handleOnUpdate={handleOnUpdate} isEditable={item.isEditable} visibility={setVisibility} handleOnDelete={handleOnDelete} handleStatusChange={handleStatusChange} key={item.id} taskNo={item.id} current={item.title} status={item.isComplete} />
                     })
                 }
             </div>

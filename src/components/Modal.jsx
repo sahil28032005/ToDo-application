@@ -10,6 +10,7 @@ export default function Modal(props) {
                     <br/>
                     <a href="#" onClick={props.adder} className="btn btn-primary">Add</a>
                     <a href="#" onClick={props.close} className="btn btn-primary mx-4">close</a>
+                    <button type="button" className="btn btn-success">Update</button>
                 </div>
         </div>
     )
