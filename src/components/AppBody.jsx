@@ -71,24 +71,25 @@ export default function AppBody() {
 
     }
     const handleOnUpdate = (id) => {
-        const updated=taskList.map((item) => {
-            if(item.id === id) {
-                item.isEditable=true;
-                if(current!=""){
-                    item.title=current;
-                    item.isEditable=false;
+        const updated = taskList.map((item) => {
+            if (item.id === id) {
+                item.isEditable = true;
+                if (current != "") {
+                    item.title = current;
+                    item.isEditable = false;
                 }
                 return item;
             }
-            else{
+            else {
+                item.isEditable = false;
                 return item;
             }
         })
         console.log(updated);
         updateTaskList(updated);
-        
+
     };
-   
+
     return (
         <>
             <div className="add" onClick={openModal}><img src="./src/assets/icons8-plus.svg" alt="" /></div>
